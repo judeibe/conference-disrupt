@@ -35,10 +35,10 @@ dependencies {
 
 tasks.jacocoTestReport {
     reports {
-        xml.isEnabled = false
+        xml.isEnabled = true
         csv.isEnabled = false
         html.isEnabled = true
-        html.destination = file("$buildDir/reports/coverage")
+        xml.destination = file("$buildDir/reports/jacoco/report.xml")
     }
 }
 

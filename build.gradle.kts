@@ -42,10 +42,11 @@ tasks.jacocoTestReport {
     }
 }
 
-val codeCoverageReport by tasks.registering {
+val codeCoverageReport by tasks.creating(JacocoReport::class) {
     group = "verification"
     description = "Runs the unit tests with coverage."
 
+    executionData(fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec"))
     dependsOn(":test", ":jacocoTestReport")
     val jacocoTestReport = tasks.findByName("jacocoTestReport")
     jacocoTestReport?.mustRunAfter(tasks.findByName("test"))

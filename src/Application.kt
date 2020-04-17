@@ -1,11 +1,15 @@
 package com.judeibe
 
-import io.ktor.application.*
-import io.ktor.response.*
-import io.ktor.request.*
-import io.ktor.routing.*
-import io.ktor.http.*
-import io.ktor.locations.*
+import io.ktor.application.Application
+import io.ktor.application.call
+import io.ktor.application.install
+import io.ktor.http.ContentType
+import io.ktor.locations.Location
+import io.ktor.locations.Locations
+import io.ktor.locations.get
+import io.ktor.response.respondText
+import io.ktor.routing.get
+import io.ktor.routing.routing
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
@@ -43,4 +47,3 @@ class MyLocation(val name: String, val arg1: Int = 42, val arg2: String = "defau
     @Location("/list/{page}")
     data class List(val type: Type, val page: Int)
 }
-

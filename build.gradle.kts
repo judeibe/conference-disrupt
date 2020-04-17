@@ -7,6 +7,7 @@ plugins {
     jacoco
     id("org.jlleitschuh.gradle.ktlint") version "9.2.1"
     kotlin("jvm") version "1.3.70"
+    id("com.github.johnrengelman.shadow") version "5.0.0"
 }
 
 group = "com.judeibe"
@@ -48,6 +49,16 @@ val codeCoverageReport by tasks.creating(JacocoReport::class) {
     dependsOn(":test", ":jacocoTestReport")
     val jacocoTestReport = tasks.findByName("jacocoTestReport")
     jacocoTestReport?.mustRunAfter(tasks.findByName("test"))
+}
+
+tasks.withType<Jar> {
+    manifest {
+        attributes(
+                mapOf(
+                        "Main-Class" to application.mainClassName
+                )
+        )
+    }
 }
 
 kotlin.sourceSets["main"].kotlin.srcDirs("src")

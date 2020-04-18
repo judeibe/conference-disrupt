@@ -1,10 +1,5 @@
 {
   "name": "Conference Disrupt",
   "description": "Conference Management",
-  "image": "heroku/java",
-  "buildpacks": [
-    {
-      "url": "heroku/java"
-    }
-  ]
+  "image": "heroku/java"
 }

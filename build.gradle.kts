@@ -1,13 +1,13 @@
-import org.jetbrains.kotlin.gradle.dsl.Coroutines
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 val logback_version: String by project
 val ktor_version: String by project
 val kotlin_version: String by project
 
 plugins {
     application
+    jacoco
+    id("org.jlleitschuh.gradle.ktlint") version "9.2.1"
     kotlin("jvm") version "1.3.70"
+    id("com.github.johnrengelman.shadow") version "5.0.0"
 }
 
 group = "com.judeibe"
@@ -30,6 +30,35 @@ dependencies {
     implementation("io.ktor:ktor-server-core:$ktor_version")
     implementation("io.ktor:ktor-locations:$ktor_version")
     testImplementation("io.ktor:ktor-server-tests:$ktor_version")
+}
+
+tasks.jacocoTestReport {
+    reports {
+        xml.isEnabled = true
+        csv.isEnabled = false
+        html.isEnabled = true
+        xml.destination = file("$buildDir/reports/jacoco/report.xml")
+    }
+}
+
+val codeCoverageReport by tasks.creating(JacocoReport::class) {
+    group = "verification"
+    description = "Runs the unit tests with coverage."
+
+    executionData(fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec"))
+    dependsOn(":test", ":jacocoTestReport")
+    val jacocoTestReport = tasks.findByName("jacocoTestReport")
+    jacocoTestReport?.mustRunAfter(tasks.findByName("test"))
+}
+
+tasks.withType<Jar> {
+    manifest {
+        attributes(
+                mapOf(
+                        "Main-Class" to application.mainClassName
+                )
+        )
+    }
 }
 
 kotlin.sourceSets["main"].kotlin.srcDirs("src")
